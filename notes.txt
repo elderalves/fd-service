@@ -1,0 +1,4 @@
+810324724891.dkr.ecr.us-east-1.amazonaws.com/fem-fd-service
+
+
+postgresql://postgres.warfxoinxxsaqfzynklw:Y4hk9fpJL36PTBwM@aws-1-us-east-2.pooler.supabase.com:5432/postgres
