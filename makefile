@@ -5,8 +5,12 @@ AWS_ECR_DOMAIN := $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_DEFAULT_REGION).amazonaws.com
 GIT_SHA := $(shell git rev-parse HEAD)
 BUILD_IMAGE := $(AWS_ECR_DOMAIN)/fem-fd-service
 BUILD_TAG := $(if $(BUILD_TAG),$(BUILD_TAG),latest)
-DOCKERIZE_HOST := $(shell echo $(GOOSE_DBSTRING) | cut -d "@" -f 2 | cut -d ":" -f 1)
-DOCKERIZE_URL := tcp:$(if $(DOCKERIZE_HOST),$(DOCKERIZE_HOST):15432,localhost:15432)
+
+# Extract host and port from the DSN, e.g. postgresql://user:pass@host:port/db
+DOCKERIZE_HOST := $(shell echo $(GOOSE_DBSTRING) | sed -nE 's|.*@([^:/?\#]+).*|\1|p')
+DOCKERIZE_PORT := $(shell echo $(GOOSE_DBSTRING) | sed -nE 's|.*@[^:]+:([0-9]+).*|\1|p')
+DOCKERIZE_URL := $(if $(DOCKERIZE_HOST),tcp://$(DOCKERIZE_HOST):$(if $(DOCKERIZE_PORT),$(DOCKERIZE_PORT),5432),tcp://localhost:5432)
+
 .DEFAULT_GOAL := build
 
 # Targets
