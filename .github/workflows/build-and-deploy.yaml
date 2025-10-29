@@ -44,7 +44,7 @@ jobs:
         run: make down
 
   deploy:
-    # if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     concurrency:
       cancel-in-progress: false
       group: deploy-lock
