@@ -44,6 +44,7 @@ jobs:
         run: make down
 
   deploy:
+    # if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     concurrency:
       cancel-in-progress: false
       group: deploy-lock
@@ -54,7 +55,6 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       GOOSE_DBSTRING: ${{ secrets.GOOSE_DBSTRING }}
       GOOSE_DRIVER: ${{ vars.GOOSE_DRIVER }}
-    if: github.ref == 'refs/head/main'
     needs:
       - test
     runs-on: ubuntu-latest
